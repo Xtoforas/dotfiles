@@ -61,7 +61,7 @@ if v:version >= 700
   " Serach for TODO/FIXME - :SearchTasks
   Plugin 'gilsondev/searchtasks.vim'
   " Auto-complete
-  Plugin 'Shuogo/neocomplete.vim'
+  Plugin 'Shougo/neocomplete.vim'
   " Auto-build
   Plugin 'tpope/vim-dispatch'
 
