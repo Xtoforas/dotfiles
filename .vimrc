@@ -180,8 +180,8 @@ filetype indent off     " Turn off indention by filetype.
 au FileType * set autoindent nosmartindent nocindent fo+=q fo-=r fo-=o
 
 " Whitespace.
-set tabstop=2           " Number of spaces a tab counts for.
-set shiftwidth=2        " Number of spaces to use for each step of indent.
+set tabstop=4           " Number of spaces a tab counts for.
+set shiftwidth=4        " Number of spaces to use for each step of indent.
 set shiftround          " Round indent to multiple of shiftwidth.
 set noexpandtab         " Do not expand tab with spaces.
 
@@ -940,9 +940,9 @@ au FileType c,cpp setl comments=sO:*\ -,mO:*\ \ ,exO:*/,s1:/*,mb:*,ex:*/,bO:///,
 au FileType c,cpp nnoremap <buffer> <Leader>inc /^#include <<CR>:nohlsearch<CR>:echo<CR>
 au FileType c,cpp nnoremap <buffer> <Leader>Inc /^#include "<CR>:nohlsearch<CR>:echo<CR>
 au FileType c,cpp setl expandtab  " Use tabs instead of spaces.
-au FileType c,cpp setl tabstop=2     " A tab counts for 4 spaces.
-au FileType c,cpp setl softtabstop=2 " Causes backspace to delete 4 spaces.
-au FileType c,cpp setl shiftwidth=2  " Shift by 4 spaces.
+au FileType c,cpp setl tabstop=4     " A tab counts for 4 spaces.
+au FileType c,cpp setl softtabstop=4 " Causes backspace to delete 4 spaces.
+au FileType c,cpp setl shiftwidth=4  " Shift by 4 spaces.
 
 " Open both a .c|cpp|cc file and the corresponding .h file in a new tab.
 function! s:GetCFile(base_name)
