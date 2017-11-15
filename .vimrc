@@ -85,7 +85,7 @@ if v:version >= 700
   Plugin 'altercation/vim-colors-solarized'
   Plugin 'qpkorr/vim-bufkill'
 
-  "Plugin 'tpope/vim-fugitive'
+  Plugin 'tpope/vim-fugitive'
   "Plugin 'christoomey/vim-tmux-navigator'
   "Plugin 'scrooloose/syntastic'
   "Plugin 'chazy/cscope_maps'
