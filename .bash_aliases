@@ -3,5 +3,5 @@
 # for examples
 
 alias pst="ps auxf"
-alias build_mojo="jump linux; if [ -z ${IMAGE+x} ]; then source source-me.env; fi; bitbake -c cleansstate mojolibc; bitbake mojolibc"
+alias cpu="grep cpu /proc/stat | awk '{usage=(\$2+\$4)*100/(\$2+\$4+\$5)} END {print usage}' | awk '{printf(\"%.1f\n\", \$1)}'"
 
