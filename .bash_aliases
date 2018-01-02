@@ -3,5 +3,5 @@
 # for examples
 
 alias pst="ps auxf"
-alias build_mojo="jump linux; if [ -z ${IMAGE+x} ]; then source source-me.env; fi; bitbake -c cleansstate mojolibc; bitbake mojolibc"
-
+alias flake8="python3 -m flake8 --max-line-length=89 --max-complexity=10"
+alias gr="grep --exclude \"bazel*\""

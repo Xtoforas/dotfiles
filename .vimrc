@@ -1,6 +1,6 @@
 "------------------------------------------------------------------------------
 " File:     $HOME/.vimrc
-" Author:   Chris Olekas <chris.olekas@cognitivesystems.com>
+" Author:   Chris Olekas <chris.olekas@ssimwave.com>
 "
 " Based on several vimrc's including
 " https://github.com/s3rvac/dotfiles/blob/master/vim/.vimrc - Petr Zemek <s3rvac@gmail.com>
@@ -65,19 +65,18 @@ if v:version >= 700
   " Auto-build
   Plugin 'tpope/vim-dispatch'
 
-
   """"""""""""""""""""""""""""""""""""
   " Generic Programming Support
   """"""""""""""""""""""""""""""""""""
   Plugin 'jakedouglas/exuberant-ctags'
-  Plugin 'honza/vim-snippets'
-  Plugin 'Townk/vim-autoclose'
-  Plugin 'tomtom/tcomment_vim'
+  "Plugin 'honza/vim-snippets'
+  "Plugin 'Townk/vim-autoclose'
+  "Plugin 'tomtom/tcomment_vim'
   Plugin 'tobyS/vmustache'
-  Plugin 'janko-m/vim-test'
-  Plugin 'maksimr/vim-jsbeautify'
-  Plugin 'vim-syntastic/syntastic'
-  Plugin 'neomake/neomake'
+  "Plugin 'janko-m/vim-test'
+  "Plugin 'maksimr/vim-jsbeautify'
+  "Plugin 'vim-syntastic/syntastic'
+  "Plugin 'neomake/neomake'
 
   """"""""""""""""""""""""""""""""""""
   " Other
@@ -85,12 +84,11 @@ if v:version >= 700
   Plugin 'altercation/vim-colors-solarized'
   Plugin 'qpkorr/vim-bufkill'
 
-  "Plugin 'tpope/vim-fugitive'
+  Plugin 'tpope/vim-fugitive'
+  "Plugin 'Valloric/YouCompleteMe'
   "Plugin 'christoomey/vim-tmux-navigator'
-  "Plugin 'scrooloose/syntastic'
   "Plugin 'chazy/cscope_maps'
   "Plugin 'rdnetto/YCM-Generator'
-  "Plugin 'Valloric/YouCompleteMe'
   "Plugin 'L9'
   "Plugin 'vim-scripts/FuzzyFinder'
   "Plugin 'dhruvasagar/vim-vinegar'
@@ -253,6 +251,7 @@ set statusline+=\ [%{(&fenc\ ==\"\"?&enc:&fenc).(&bomb?\",BOM\":\"\")},%{&ff}] "
 set statusline+=\ %y                         " File type.
 "set statusline+=\ [\%03.3b,0x\%02.2B,U+%04B] " Codes of the character under cursor.
 set statusline+=\ [%l/%L\ (%p%%),%v]         " Line and column numbers.
+set statusline+=%<%f\ %h%m%r%{fugitive#statusline()}%=%-14.(%l,%c%V%)\ %P
 
 " Tell Vim which characters to show for expanded tabs, trailing whitespace,
 " ends of lines, and non-breakable space.
@@ -277,7 +276,7 @@ set completeopt=longest,menuone
 set complete-=i
 " Enable omni completion.
 set omnifunc=syntaxcomplete#Complete
-" set tags=./tags,./TAGS,tags,TAGS
+set tags=./tags,../tags,../../tags,../../../tags
 
 " Searching.
 set hlsearch            " Highlight search matches.
@@ -345,7 +344,8 @@ set mouse=a
 if has('gui_running')
   " Font.
   "set guifont=Monospace\ 10.5
-  set guifont=Consolas\ 10
+  "set guifont=Consolas\ 10
+  set guifont=Hack\ 12
 
   " GUI options:
   "  - aA: Enable autoselection.
@@ -460,7 +460,8 @@ au BufEnter * hi TabLineSel guibg=black guifg=white ctermbg=black ctermfg=white
 au BufEnter * hi TabLineFill guibg=black guifg=black ctermbg=black ctermfg=black
 
 " Colorcolumn.
-au BufEnter * hi ColorColumn guibg=gray19 guifg=white ctermbg=236 ctermfg=white
+" au BufEnter * hi ColorColumn guibg=gray19 guifg=white ctermbg=236 ctermfg=white
+au BufEnter * hi ColorColumn guibg=#2c2d27 guifg=white ctermbg=0 ctermfg=white
 
 " Messages.
 au BufEnter * hi MoreMsg guibg=black guifg=green1 ctermbg=black ctermfg=46
@@ -525,7 +526,7 @@ function! s:ToggleColorColumn()
   elseif &textwidth > 0
     let &colorcolumn = &textwidth
   else
-    set colorcolumn=80
+    set colorcolumn=90
   endif
 endfunction
 nnoremap <silent> <S-F3> :call <SID>ToggleColorColumn()<CR>
@@ -692,9 +693,10 @@ noremap <Leader>j J
 function! s:JoinWithoutSpaces()
   normal! gJ
   " Remove any whitespace.
-  if matchstr(getline('.'), '\%' . col('.') . 'c.') =~ '\s'
-    normal! dw
-  endif
+  " TODO TEMPORARY until code is cleaned up
+  " if matchstr(getline('.'), '\%' . col('.') . 'c.') =~ '\s'
+  "   normal! dw
+  " endif
 endfunction
 noremap <silent> <Leader>J :call <SID>JoinWithoutSpaces()<CR>
 
@@ -811,17 +813,17 @@ if v:version >= 700
   map <C-n> :NERDTreeToggle<CR>
   autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
   set statusline+=%#warningmsg#
-  set statusline+=%{SyntasticStatuslineFlag()}
+  "set statusline+=%{SyntasticStatuslineFlag()}
   set statusline+=%*
 
-  let g:syntastic_always_populate_loc_list = 1
-  let g:syntastic_auto_loc_list = 1
-  let g:syntastic_check_on_open = 1
-  let g:syntastic_check_on_wq = 0
-  let g:syntastic_c_include_dirs = [ ]
-  let g:syntastic_c_checkers = ['splint', 'gcc']
-  let g:syntastic_mode_map = { 'mode': 'passive', 'active_filetypes': [],'passive_filetypes': [] }
-  nnoremap <C-w>E :SyntasticCheck<CR> :SyntasticToggleMode<CR>
+  "let g:syntastic_always_populate_loc_list = 1
+  "let g:syntastic_auto_loc_list = 1
+  "let g:syntastic_check_on_open = 1
+  "let g:syntastic_check_on_wq = 0
+  "let g:syntastic_c_include_dirs = [ ]
+  "let g:syntastic_c_checkers = ['clang_tidy']
+  "let g:syntastic_mode_map = { 'mode': 'passive', 'active_filetypes': [],'passive_filetypes': [] }
+  "nnoremap <C-w>E :SyntasticCheck<CR> :SyntasticToggleMode<CR>
 endif
 
 
@@ -869,22 +871,23 @@ let g:python_print_as_function=1
 " File-type specific settings and other autocommands.
 "------------------------------------------------------------------------------
 
-augroup trailing_whitespace
-au!
-" Automatically remove trailing whitespace when saving a file.
-function! s:RemoveTrailingWhitespace()
-  let pattern = '\\s\\+$'
-  if &ft ==# 'mail'
-    " Do not remove the space from the email signature marker ("-- \n").
-    let pattern = '\\(^--\\)\\@<!' . pattern
-  endif
-  call setline(1, map(getline(1, '$'), 'substitute(v:val, "' . pattern . '", "", "")'))
-endfunction
-au BufWritePre * :if !&bin | call s:RemoveTrailingWhitespace()
-" Add a new command :W that can be used to write a file without removing
-" trailing whitespace (sometimes, this is handy).
-command! W :set eventignore=BufWritePre | w | set eventignore=""
-augroup end
+"TEMPORARY TODO DON'T REMOVE UNTL CODE CLEANUP
+"augroup trailing_whitespace
+"au!
+"" Automatically remove trailing whitespace when saving a file.
+"function! s:RemoveTrailingWhitespace()
+"  let pattern = '\\s\\+$'
+"  if &ft ==# 'mail'
+"    " Do not remove the space from the email signature marker ("-- \n").
+"    let pattern = '\\(^--\\)\\@<!' . pattern
+"  endif
+"  call setline(1, map(getline(1, '$'), 'substitute(v:val, "' . pattern . '", "", "")'))
+"endfunction
+"au BufWritePre * :if !&bin | call s:RemoveTrailingWhitespace()
+"" Add a new command :W that can be used to write a file without removing
+"" trailing whitespace (sometimes, this is handy).
+"command! W :set eventignore=BufWritePre | w | set eventignore=""
+"augroup end
 
 " Trailing whitespace and tabs are forbidden, so highlight them.
 highlight ForbiddenWhitespace ctermbg=red guibg=red
@@ -1069,7 +1072,7 @@ augroup end
 " Shell
 augroup sh
 au!
-au FileType sh setl noexpandtab  " Use tabs instead of spaces.
+au FileType sh setl expandtab  " Use tabs instead of spaces.
 augroup end
 
 " MySQL
@@ -1231,16 +1234,8 @@ set cscoperelative
 " Disable highlight by ,c
 nnoremap <Leader>c :nohl<CR>
 
-" List waf targets
-if expand("%:p:h") =~ '^/p4/depot/SW/trillium/dev/fw/mxp*'
-  "set makeprg=/p4/depot/SW/trillium/dev/fw/mxp/waf
-
-  nnoremap <Leader>bca :!cd /p4/depot/SW/trillium/dev/fw/mxp && ./waf configure amera_prod<CR>
-  nnoremap <Leader>bcm :!cd /p4/depot/SW/trillium/dev/fw/mxp && ./waf configure mojo<CR>
-endif
-
 if exists('+colorcolumn')
-  set colorcolumn=80
+  set colorcolumn=90
 else
   au BufWinEnter * let w:m2=matchadd('ErrorMsg', '\%>80v.\+', -1)
 endif

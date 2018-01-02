@@ -160,3 +160,13 @@ fi
 
 # Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
 export PATH="$PATH:$HOME/.rvm/bin"
+
+# SSIMWAVE Specific
+# for kcov
+export COVERAGE_BROWSER="google-chrome"
+
+# for VIM
+export EDITOR=vim
+
+# (SSW) for GCC7.2 in backend build
+export DEFAULT_COMPILER=1
