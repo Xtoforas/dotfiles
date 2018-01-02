@@ -417,6 +417,9 @@ endif
 " Syntax highlighting.
 syntax on
 
+set term=screen-256color
+set t_ut=
+set t_Co=256
 " Color scheme. Thanks to the CSApprox plugin, I may use the same scheme in
 " both graphical and terminal Vims.
 if v:version >= 700
