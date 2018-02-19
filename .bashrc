@@ -285,3 +285,13 @@ PROMPT_COMMAND='__setprompt'
 
 # Turn off bell
 set bell-style none
+
+# SSIMWAVE Specific
+# for kcov
+export COVERAGE_BROWSER="google-chrome"
+
+# for VIM
+export EDITOR=vim
+
+# (SSW) for GCC7.2 in backend build
+export DEFAULT_COMPILER=1
