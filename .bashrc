@@ -8,6 +8,10 @@ case $- in
       *) return;;
 esac
 
+# Set editor to vim
+export VISUAL=vim
+export EDITOR="$VISUAL"
+
 # don't put duplicate lines or lines starting with space in the history.
 # See bash(1) for more options
 HISTCONTROL=ignoreboth:erasedups
@@ -140,6 +144,7 @@ _completemarks() {
 
 # Ensure screen is cleared when exiting vim
 export TERM=xterm
+
 # Enable autocomplete
 complete -F _completemarks jump unmark
 
@@ -277,3 +282,6 @@ function __setprompt
 }
 
 PROMPT_COMMAND='__setprompt'
+
+# Turn off bell
+set bell-style none

@@ -1,12 +1,13 @@
 "------------------------------------------------------------------------------
 " File:     $HOME/.vimrc
-" Author:   Chris Olekas <chris.olekas@cognitivesystems.com>
+" Author:   Chris Olekas <chris.olekas@gmail.com>
 "
 " Based on several vimrc's including
-" https://github.com/s3rvac/dotfiles/blob/master/vim/.vimrc - Petr Zemek <s3rvac@gmail.com>
+" https://github.com/s3rvac/dotfiles/blob/master/vim/.vimrc
+" - Petr Zemek <s3rvac@gmail.com>
 " http://www.hermann-uwe.de/files/vimrc.
 " S. Doherty's vimrc
-"h ttp://coderoncode.com/tools/2017/04/16/vim-the-perfect-ide.html
+" http://coderoncode.com/tools/2017/04/16/vim-the-perfect-ide.html
 "------------------------------------------------------------------------------
 
 "------------------------------------------------------------------------------
@@ -38,6 +39,8 @@ if v:version >= 700
   " Utility
   """"""""""""""""""""""""""""""""""""
   Plugin 'scrooloose/nerdtree'
+  Plugin 'Xuyuanp/nerdtree-git-plugin'
+  " Displays tag in side window
   Plugin 'majutsushi/tagbar'
   " Tab complete
   Plugin 'ervandew/supertab'
@@ -78,19 +81,31 @@ if v:version >= 700
   Plugin 'maksimr/vim-jsbeautify'
   Plugin 'vim-syntastic/syntastic'
   Plugin 'neomake/neomake'
+  Plugin 'chazy/cscope_maps'
+  " Powerful clang based completion engine
+  Plugin 'Valloric/YouCompleteMe'
+
+  """"""""""""""""""""""""""""""""""""
+  " Git
+  """"""""""""""""""""""""""""""""""""
+  Plugin 'tpope/vim-fugitive'
+  Plugin 'kablamo/vim-git-log'
+  Plugin 'gregsexton/gitv'
+
+  """"""""""""""""""""""""""""""""""""
+  " Themes
+  """"""""""""""""""""""""""""""""""""
+  Plugin 'altercation/vim-colors-solarized'
+  Plugin 'ryanoasis/vim-devicons'
+  Plugin 'vim-airline/vim-airline'
+  Plugin 'vim-airline/vim-airline-themes'
 
   """"""""""""""""""""""""""""""""""""
   " Other
   """"""""""""""""""""""""""""""""""""
-  Plugin 'altercation/vim-colors-solarized'
   Plugin 'qpkorr/vim-bufkill'
-
-  Plugin 'tpope/vim-fugitive'
   "Plugin 'christoomey/vim-tmux-navigator'
-  "Plugin 'scrooloose/syntastic'
-  "Plugin 'chazy/cscope_maps'
   "Plugin 'rdnetto/YCM-Generator'
-  "Plugin 'Valloric/YouCompleteMe'
   "Plugin 'L9'
   "Plugin 'vim-scripts/FuzzyFinder'
   "Plugin 'dhruvasagar/vim-vinegar'
@@ -807,6 +822,8 @@ nnoremap <Leader>bib :tabe *.bib<CR>
 "------------------------------------------------------------------------------
 " Plugins.
 "------------------------------------------------------------------------------
+let g:ycm_global_ycm_extra_conf = '~/src/livemonitor-backend/.ycm_extra_conf.py'
+
 "----------------------------------------
 " NERDTree: File system-eque
 "----------------------------------------
@@ -1050,15 +1067,6 @@ au FileType cpp nnoremap <buffer> <F10> :w<CR>:!clear; g++ -std=c++14 -pedantic 
 au FileType cpp nnoremap <buffer> <S-F10> :w<CR>:!clear; clang++ -std=c++14 -pedantic -Wall -Wextra -o /tmp/a.out % && /tmp/a.out<CR>
 augroup end
 
-" PHP
-augroup php
-au!
-" Use <Leader>man to display manual pages for the function under cursor in a browser.
-au FileType php nnoremap <buffer> <silent> <Leader>man :call <SID>OpenLink('http://php.net/'.expand('<cword>'))<CR>
-" Make "gq" on comments work properly.
-au FileType php setl comments=sO:*\ -,mO:*\ \ ,exO:*/,s1:/*,mb:*,ex:*/,bO:///,O://,:#
-augroup end
-
 " LaTeX
 augroup latex
 au!
@@ -1119,33 +1127,6 @@ endfunction
 au FileType python nnoremap <buffer> <Leader>as :call <SID>ShowPythonTestsInSplit()<CR>
 augroup end
 
-" Ruby
-augroup ruby
-au!
-" The following settings are based on these guidelines:
-"  - https://raw.github.com/chneukirchen/styleguide/master/RUBY-STYLE
-au FileType ruby setl expandtab     " Use spaces instead of tabs.
-au FileType ruby setl tabstop=2     " A tab counts for 2 spaces.
-au FileType ruby setl softtabstop=2 " Causes backspace to delete 2 spaces.
-au FileType ruby setl shiftwidth=2  " Shift by 2 spaces.
-
-" Let F10 run the currently opened script.
-au FileType ruby nnoremap <buffer> <F10> :w<CR>:!clear; ruby %<CR>
-augroup end
-
-" Haskell
-augroup haskell
-au!
-" The following settings are based on these guidelines:
-"  - https://github.com/tibbe/haskell-style-guide/blob/master/haskell-style.md
-"  - http://urchin.earth.li/~ian/style/haskell.html
-"  - http://cs.caltech.edu/courses/cs11/material/haskell/misc/haskell_style_guide.html
-au FileType haskell setl expandtab     " Use spaces instead of tabs.
-au FileType haskell setl tabstop=4     " A tab counts for 4 spaces.
-au FileType haskell setl softtabstop=4 " Causes backspace to delete 4 spaces.
-au FileType haskell setl shiftwidth=4  " Shift by 4 spaces.
-augroup end
-
 " LLVM
 augroup llvm
 au!
@@ -1164,23 +1145,6 @@ au FileType gitcommit setl spell     " Enable spellchecking.
 au FileType gitcommit setl expandtab " Use spaces instead of tabs.
 augroup end
 
-" Dokuwiki
-augroup dokuwiki
-au!
-au FileType dokuwiki setl spell         " Enable spell checking.
-au FileType dokuwiki setl expandtab     " Use spaces instead of tabs.
-au FileType dokuwiki setl tabstop=2     " Lists are indented with 2 spaces.
-au FileType dokuwiki setl softtabstop=2 " Causes backspace to delete 2 spaces.
-au FileType dokuwiki setl shiftwidth=2  " Shift by 2 spaces.
-augroup end
-
-" reStructured Text
-augroup rst
-au!
-au FileType rst setl spell              " Enable spellchecking.
-au FileType rst setl expandtab          " Use spaces instead of tabs.
-augroup end
-
 " Markdown
 augroup markdown
 au!
@@ -1189,14 +1153,6 @@ au FileType markdown setl expandtab     " Use spaces instead of tabs.
 au FileType markdown setl tabstop=2     " Lists are indented with 2 spaces.
 au FileType markdown setl softtabstop=2 " Causes backspace to delete 2 spaces.
 au FileType markdown setl shiftwidth=2  " Shift by 2 spaces.
-augroup end
-
-" Mail
-augroup mail
-au!
-au FileType mail setl spell         " Enable spellchecking.
-au FileType mail setl spelllang=cs
-au FileType mail setl expandtab     " Use spaces instead of tabs.
 augroup end
 
 "------------------------------------------------------------------------------
