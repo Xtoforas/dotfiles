@@ -130,6 +130,11 @@ endif
 " General.
 "------------------------------------------------------------------------------
 
+" Ignore white spaces in diff mode
+if &diff
+	" diff mode
+	set diffopt+=iwhite
+endif
 set nocompatible        " Disable vi compatibility.
 set undolevels=200      " Number of undo levels.
 set scrolloff=10        " Keep a context (rows) when scrolling vertically.
@@ -433,9 +438,9 @@ endif
 " Syntax highlighting.
 syntax on
 
-set term=screen-256color
-set t_ut=
-set t_Co=256
+" set term=screen-256color
+" set t_ut=
+" set t_Co=256
 " Color scheme. Thanks to the CSApprox plugin, I may use the same scheme in
 " both graphical and terminal Vims.
 if v:version >= 700
@@ -1159,6 +1164,19 @@ au FileType markdown setl softtabstop=2 " Causes backspace to delete 2 spaces.
 au FileType markdown setl shiftwidth=2  " Shift by 2 spaces.
 augroup end
 
+" Mail
+augroup mail
+au!
+au FileType mail setl spell         " Enable spellchecking.
+au FileType mail setl spelllang=cs
+au FileType mail setl expandtab     " Use spaces instead of tabs.
+augroup end
+
+" Bazel build files
+augroup bzl
+au!
+au FileType bzl setl expandtab     " Use spaces instead of tabs.
+augroup end
 "------------------------------------------------------------------------------
 " Typos correction.
 "------------------------------------------------------------------------------
