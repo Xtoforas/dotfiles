@@ -8,6 +8,10 @@ case $- in
       *) return;;
 esac
 
+# Set editor to vim
+export VISUAL=vim
+export EDITOR="$VISUAL"
+
 # don't put duplicate lines or lines starting with space in the history.
 # See bash(1) for more options
 HISTCONTROL=ignoreboth:erasedups
@@ -92,9 +96,6 @@ alias ll='ls -alF'
 alias la='ls -A'
 alias l='ls -CF'
 
-# for VIM
-export EDITOR=vim
-
 # Add an "alert" alias for long running commands.  Use like so:
 #   sleep 10; alert
 alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
@@ -143,6 +144,7 @@ _completemarks() {
 
 # Ensure screen is cleared when exiting vim
 export TERM=xterm
+
 # Enable autocomplete
 complete -F _completemarks jump unmark
 
@@ -315,7 +317,6 @@ function __setprompt
 
 PROMPT_COMMAND='__setprompt'
 
-
 # Show the current distribution
 distribution ()
 {
@@ -404,6 +405,8 @@ function whatsmyip ()
     echo -n "External IP: " ; curl http://smart-ip.net/myip
 }
 ##################################################################################################
+# Turn off bell
+set bell-style none
 
 # SSIMWAVE Specific
 # for kcov
