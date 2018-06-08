@@ -294,4 +294,4 @@ export COVERAGE_BROWSER="google-chrome"
 export EDITOR=vim
 
 # (SSW) for GCC7.2 in backend build
-export DEFAULT_COMPILER=1
+#export DEFAULT_COMPILER=1

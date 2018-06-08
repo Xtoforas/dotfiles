@@ -72,6 +72,8 @@ if v:version >= 700
   " Generic Programming Support
   """"""""""""""""""""""""""""""""""""
   Plugin 'jakedouglas/exuberant-ctags'
+  "Plugin 'lyuts/vim-rtags'
+  Plugin 'rhysd/vim-clang-format'
   "Plugin 'honza/vim-snippets'
   "Plugin 'Townk/vim-autoclose'
   "Plugin 'tomtom/tcomment_vim'
@@ -98,6 +100,15 @@ if v:version >= 700
   Plugin 'ryanoasis/vim-devicons'
   Plugin 'vim-airline/vim-airline'
   Plugin 'vim-airline/vim-airline-themes'
+
+  """"""""""""""""""""""""""""""""""""
+  " Debugging
+  """"""""""""""""""""""""""""""""""""
+  "Plugin 'vim-scripts/Conque-GDB'
+  "Plugin 'idanarye/vim-vebugger'
+  "Plugin 'dbgx/gdb.vim'
+  "Plugin 'jimmysitu/pyclewn'
+  "Plugin 'skibyte/gdb-from-vim'
 
   """"""""""""""""""""""""""""""""""""
   " Other
@@ -430,6 +441,13 @@ else
     execute "set <F12>=\e[24;*~"
   endif
 endif
+
+"------------------------------------------------------------------------------
+" ConqueGDB
+"------------------------------------------------------------------------------
+let g:ConqueTerm_Color = 2         " 1: strip color after 200 lines, 2: always with color
+let g:ConqueTerm_CloseOnEnd = 1    " close conque when program ends running
+let g:ConqueTerm_StartMessages = 0 " display warning messages if conqueTerm is configured incorrectly
 
 "------------------------------------------------------------------------------
 " Colors.
@@ -830,7 +848,8 @@ nnoremap <Leader>bib :tabe *.bib<CR>
 "------------------------------------------------------------------------------
 " Plugins.
 "------------------------------------------------------------------------------
-let g:ycm_global_ycm_extra_conf = '~/src/livemonitor-backend/.ycm_extra_conf.py'
+"let g:ycm_global_ycm_extra_conf = '/home/ssimwave/colekas/src/big/.ycm_extra_conf.py'
+let g:ycm_confirm_extra_conf=0
 
 "----------------------------------------
 " NERDTree: File system-eque
@@ -871,6 +890,7 @@ let g:UltiSnipsEditSplit="vertical" " If you want :UltiSnipsEdit to split your w
 "----------------------------------------
 " CtrlP file searching
 "----------------------------------------
+let g:ctrlp_custom_ignore = 'bazel-*'
 nnoremap <Leader>O :CtrlP<CR>
 
 " bind K to grep word under cursor
@@ -1211,6 +1231,9 @@ set cscoperelative
 
 " Disable highlight by ,c
 nnoremap <Leader>c :nohl<CR>
+
+" Clang Format 
+vnoremap <Leader>cf :ClangFormat<CR>
 
 if exists('+colorcolumn')
   set colorcolumn=90
