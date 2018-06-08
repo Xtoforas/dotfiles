@@ -29,7 +29,7 @@ shopt -s checkwinsize
 
 # If set, the pattern "**" used in a pathname expansion context will
 # match all files and zero or more directories and subdirectories.
-#shopt -s globstar
+shopt -s globstar
 
 # make less more friendly for non-text input files, see lesspipe(1)
 [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
@@ -151,7 +151,42 @@ complete -F _completemarks jump unmark
 # VI rules, Emacs drools
 set -o vi
 
+##################################################################################################
 # Taken from https://raw.githubusercontent.com/garvitjoshi/.bashrc-files/master/.bashrc
+alias cpu="grep 'cpu ' /proc/stat | awk '{usage=(\$2+\$4)*100/(\$2+\$4+\$5)} END {print usage}' | awk '{printf(\"%.1f\n\", \$1)}'"
+
+#Show current network connections to the server
+alias ipview="netstat -anpl | grep :80 | awk {'print \$5'} | cut -d\":\" -f1 | sort | uniq -c | sort -n | sed -e 's/^ *//' -e 's/ *\$//'"
+
+# Show open ports
+alias openports='netstat -nape --inet'
+
+# Alias's for safe and forced reboots
+alias rebootsafe='sudo shutdown -r now'
+alias rebootforce='sudo shutdown -r -n now'
+
+# Alias's to show disk space and space used in a folder
+alias diskspace="du -S | sort -n -r |more"
+alias folders='du -h --max-depth=1'
+alias folderssort='find . -maxdepth 1 -type d -print0 | xargs -0 du -sk | sort -rn'
+alias tree='tree -CAhF --dirsfirst'
+alias treed='tree -CAFd'
+alias mountedinfo='df -hT'
+
+# Alias's for archives
+alias mktar='tar -cvf'
+alias mkbz2='tar -cvjf'
+alias mkgz='tar -cvzf'
+alias untar='tar -xvf'
+alias unbz2='tar -xvjf'
+alias ungz='tar -xvzf'
+
+# Show all logs in /var/log
+alias logs="sudo find /var/log -type f -exec file {} \; | grep 'text' | cut -d' ' -f1 | sed -e's/:$//g' | grep -v '[0-9]$' | xargs tail -f"
+
+# SHA1
+alias sha1='openssl sha1'
+
 function git-branch-name {
     git symbolic-ref HEAD 2>/dev/null | cut -d"/" -f 3-8
 }
@@ -186,7 +221,6 @@ function __setprompt
 
     # Show error exit code if there is one
     if [[ $LAST_COMMAND != 0 ]]; then
-        # PS1="\[${RED}\](\[${LIGHTRED}\]ERROR\[${RED}\])-(\[${LIGHTRED}\]Exit Code \[${WHITE}\]${LAST_COMMAND}\[${RED}\])-(\[${LIGHTRED}\]"
         PS1="\[${DARKGRAY}\](\[${LIGHTRED}\]ERROR\[${DARKGRAY}\])-(\[${RED}\]Exit Code \[${LIGHTRED}\]${LAST_COMMAND}\[${DARKGRAY}\])-(\[${RED}\]"
         if [[ $LAST_COMMAND == 1 ]]; then
             PS1+="General error"
@@ -228,7 +262,7 @@ function __setprompt
 
     # Date
     PS1+="\[${DARKGRAY}\](\[${CYAN}\]\$(date +%a) $(date +%b-'%-m')" # Date
-    PS1+="${BLUE} $(date +'%-I':%M:%S%P)\[${DARKGRAY}\])-" # Time
+    PS1+="${LIGHTBLUE} $(date +'%-I':%M:%S%P)\[${DARKGRAY}\])-" # Time
 
     # CPU
     PS1+="(\[${MAGENTA}\]CPU $(cpu)%"
@@ -283,15 +317,97 @@ function __setprompt
 
 PROMPT_COMMAND='__setprompt'
 
+# Show the current distribution
+distribution ()
+{
+    local dtype
+    # Assume unknown
+    dtype="unknown"
+
+    # First test against Fedora / RHEL / CentOS / generic Redhat derivative
+    if [ -r /etc/rc.d/init.d/functions ]; then
+        source /etc/rc.d/init.d/functions
+        [ zz`type -t passed 2>/dev/null` == "zzfunction" ] && dtype="redhat"
+
+    # Then test against SUSE (must be after Redhat,
+    # I've seen rc.status on Ubuntu I think? TODO: Recheck that)
+    elif [ -r /etc/rc.status ]; then
+        source /etc/rc.status
+        [ zz`type -t rc_reset 2>/dev/null` == "zzfunction" ] && dtype="suse"
+
+    # Then test against Debian, Ubuntu and friends
+    elif [ -r /lib/lsb/init-functions ]; then
+        source /lib/lsb/init-functions
+        [ zz`type -t log_begin_msg 2>/dev/null` == "zzfunction" ] && dtype="debian"
+
+    # Then test against Gentoo
+    elif [ -r /etc/init.d/functions.sh ]; then
+        source /etc/init.d/functions.sh
+        [ zz`type -t ebegin 2>/dev/null` == "zzfunction" ] && dtype="gentoo"
+
+    # For Mandriva we currently just test if /etc/mandriva-release exists
+    # and isn't empty (TODO: Find a better way :)
+    elif [ -s /etc/mandriva-release ]; then
+        dtype="mandriva"
+
+    # For Slackware we currently just test if /etc/slackware-version exists
+    elif [ -s /etc/slackware-version ]; then
+        dtype="slackware"
+
+    fi
+    echo $dtype
+}
+
+# Show the current version of the operating system
+ver ()
+{
+    local dtype
+    dtype=$(distribution)
+
+    if [ $dtype == "redhat" ]; then
+        if [ -s /etc/redhat-release ]; then
+            cat /etc/redhat-release && uname -a
+        else
+            cat /etc/issue && uname -a
+        fi
+    elif [ $dtype == "suse" ]; then
+        cat /etc/SuSE-release
+    elif [ $dtype == "debian" ]; then
+        lsb_release -a
+        # sudo cat /etc/issue && sudo cat /etc/issue.net && sudo cat /etc/lsb_release && sudo cat /etc/os-release # Linux Mint option 2
+    elif [ $dtype == "gentoo" ]; then
+        cat /etc/gentoo-release
+    elif [ $dtype == "mandriva" ]; then
+        cat /etc/mandriva-release
+    elif [ $dtype == "slackware" ]; then
+        cat /etc/slackware-version
+    else
+        if [ -s /etc/issue ]; then
+            cat /etc/issue
+        else
+            echo "Error: Unknown distribution"
+            exit 1
+        fi
+    fi
+}
+
+# IP address lookup
+alias whatismyip="whatsmyip"
+function whatsmyip ()
+{
+    # Dumps a list of all IP addresses for every device
+    # /sbin/ifconfig |grep -B1 "inet addr" |awk '{ if ( $1 == "inet" ) { print $2 } else if ( $2 == "Link" ) { printf "%s:" ,$1 } }' |awk -F: '{ print $1 ": " $3 }';
+
+    # Internal IP Lookup
+    echo -n "Internal IP: " ; /sbin/ifconfig eth0 | grep "inet " | awk -F' ' '{print $2}' | awk '{print $1}'
+
+    # External IP Lookup
+    echo -n "External IP: " ; curl http://smart-ip.net/myip
+}
+##################################################################################################
 # Turn off bell
 set bell-style none
 
 # SSIMWAVE Specific
 # for kcov
 export COVERAGE_BROWSER="google-chrome"
-
-# for VIM
-export EDITOR=vim
-
-# (SSW) for GCC7.2 in backend build
-#export DEFAULT_COMPILER=1
