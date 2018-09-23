@@ -83,6 +83,7 @@ if v:version >= 700
   Plugin 'chazy/cscope_maps'
   " Powerful clang based completion engine
   Plugin 'Valloric/YouCompleteMe'
+  Plugin 'pangloss/vim-javascript'
 
   """"""""""""""""""""""""""""""""""""
   " Git
@@ -1177,6 +1178,18 @@ augroup bzl
 au!
 au FileType bzl setl expandtab     " Use spaces instead of tabs.
 augroup end
+
+" Javascript
+let g:javascript_plugin_flow=1
+" Bazel build files
+augroup javascript
+au!
+au FileType javascript setl tabstop=2     " A tab counts for 2 spaces.
+au FileType javascript setl softtabstop=2 " Causes backspace to delete 2 spaces.
+au FileType javascript setl shiftwidth=2  " Shift by 2 spaces.
+au FileType javascript setl expandtab     " Use spaces instead of tabs.
+augroup end
+
 "------------------------------------------------------------------------------
 " Typos correction.
 "------------------------------------------------------------------------------
