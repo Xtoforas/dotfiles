@@ -411,3 +411,5 @@ set bell-style none
 # SSIMWAVE Specific
 # for kcov
 export COVERAGE_BROWSER="google-chrome"
+PATH="$PATH:/home/colekas/.local/bin"
+eval "$(register-python-argcomplete hitch)"

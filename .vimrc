@@ -17,9 +17,11 @@
 " https://github.com/VundleVim/Vundle.vim
 "------------------------------------------------------------------------------
 
+" Enabling filetype support provides filetype-specific indenting,
+" syntax highlighting, omni-completion and other useful settings.
+filetype plugin indent on
+
 if v:version >= 700
-  set nocompatible               " be iMproved
-  syntax on
   set nowrap
   filetype off                   " required!
   set nocscopeverbose            " to avoid error from cscope_maps
@@ -72,7 +74,6 @@ if v:version >= 700
   " Generic Programming Support
   """"""""""""""""""""""""""""""""""""
   Plugin 'jakedouglas/exuberant-ctags'
-  "Plugin 'lyuts/vim-rtags'
   Plugin 'rhysd/vim-clang-format'
   "Plugin 'honza/vim-snippets'
   "Plugin 'Townk/vim-autoclose'
@@ -85,6 +86,8 @@ if v:version >= 700
   Plugin 'chazy/cscope_maps'
   " Powerful clang based completion engine
   Plugin 'Valloric/YouCompleteMe'
+  " tag manager
+  "Plugin 'craigemery/vim-autotag'
 
   """"""""""""""""""""""""""""""""""""
   " Git
@@ -98,8 +101,9 @@ if v:version >= 700
   """"""""""""""""""""""""""""""""""""
   Plugin 'altercation/vim-colors-solarized'
   Plugin 'ryanoasis/vim-devicons'
-  Plugin 'vim-airline/vim-airline'
-  Plugin 'vim-airline/vim-airline-themes'
+  "Plugin 'vim-airline/vim-airline'
+  "Plugin 'vim-airline/vim-airline-themes'
+  "Plugin 'rbong/vim-crystalline'
 
   """"""""""""""""""""""""""""""""""""
   " Debugging
@@ -122,7 +126,6 @@ if v:version >= 700
 
   " All of your Plugins must be added before the following line
   call vundle#end()            " required
-  filetype plugin indent on    " required
   " To ignore plugin indent changes, instead use:
   "filetype plugin on
   "
@@ -184,7 +187,7 @@ set viminfo+=h          " Do not store searches.
 
 " Line numbers.
 set number              " Show line numbers.
-"set relativenumber      " Show relative numbers instead of absolute ones.
+set relativenumber      " Show relative numbers instead of absolute ones.
 
 " Splitting.
 set splitright          " Open new vertical panes in the right rather than left.
@@ -284,6 +287,27 @@ set statusline+=\ %y                         " File type.
 "set statusline+=\ [\%03.3b,0x\%02.2B,U+%04B] " Codes of the character under cursor.
 set statusline+=\ [%l/%L\ (%p%%),%v]         " Line and column numbers.
 set statusline+=%<%f\ %h%m%r%{fugitive#statusline()}%=%-14.(%l,%c%V%)\ %P
+"""""""""""""""""""""""""
+"function! StatusLine(current)
+"  return (a:current ? crystalline#mode() . '%#Crystalline#' : '%#CrystallineInactive#')
+"        \ . ' %f%h%w%m%r '
+"        \ . (a:current ? '%#CrystallineFill# %{fugitive#head()} ' : '')
+"        \ . '%=' . (a:current ? '%#Crystalline# %{&paste?"PASTE ":""}%{&spell?"SPELL ":""}' . crystalline#mode_color() : '')
+"        \ . ' %{&ft}[%{&enc}][%{&ffs}] %l/%L %c%V %P '
+"endfunction
+"
+"function! TabLine()
+"  let l:vimlabel = has("nvim") ?  " NVIM " : " VIM "
+"  return crystalline#bufferline(2, len(l:vimlabel), 1) . '%=%#CrystallineTab# ' . l:vimlabel
+"endfunction
+"
+"let g:crystalline_statusline_fn = 'StatusLine'
+"let g:crystalline_tabline_fn = 'TabLine'
+"let g:crystalline_theme = 'default'
+"
+"set showtabline=2
+"set laststatus=2
+""""""""""""""""""""""
 
 " Tell Vim which characters to show for expanded tabs, trailing whitespace,
 " ends of lines, and non-breakable space.
@@ -308,7 +332,10 @@ set completeopt=longest,menuone
 set complete-=i
 " Enable omni completion.
 set omnifunc=syntaxcomplete#Complete
-set tags=./tags,../tags,../../tags,../../../tags
+set tags=.git/tags
+
+" Set autotags
+let g:autotagTagsFile = '.git/tags'
 
 " Searching.
 set hlsearch            " Highlight search matches.
@@ -849,7 +876,7 @@ nnoremap <Leader>bib :tabe *.bib<CR>
 " Plugins.
 "------------------------------------------------------------------------------
 "let g:ycm_global_ycm_extra_conf = '/home/ssimwave/colekas/src/big/.ycm_extra_conf.py'
-let g:ycm_confirm_extra_conf=0
+"let g:ycm_confirm_extra_conf=0
 
 "----------------------------------------
 " NERDTree: File system-eque
@@ -891,7 +918,7 @@ let g:UltiSnipsEditSplit="vertical" " If you want :UltiSnipsEdit to split your w
 " CtrlP file searching
 "----------------------------------------
 let g:ctrlp_custom_ignore = 'bazel-*'
-nnoremap <Leader>O :CtrlP<CR>
+nnoremap <Leader>O :CtrlPTag<CR>
 
 " bind K to grep word under cursor
 "nnoremap K :grep! "\b<C-R><C-W>\b"<CR>:cw<CR>
